@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+
+db.sqlite3
+**/migrations/*
+!**/migrations/__init__.py
+
+/eval_utility/china_all_financial_data.csv
+/eval_utility/china_magic_formula_results.csv
+/eval_utility/china_stock_overview.csv
+/eval_utility/STHeiti_Medium_1.ttf
+
+*.DS_Store
