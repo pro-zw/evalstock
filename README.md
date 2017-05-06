@@ -32,8 +32,8 @@
 
 3. 运行 `python manage.py shell`（注意仍然是从项目 evalstock 根目录下运行）
 
-4. 在 python 命令行交互界面运行 `import eval\_utility.china_import` 导入原始数据
+4. 在 python 命令行交互界面运行 `import eval_utility.china_import` 导入原始数据
 
-5. 在 python 命令行交互界面运行 `import eval\_utility.china\_magic\_formula` 执行神奇公式选股。除了 matplotlib 散点图，该脚本还会将初选结果保存中 eval\_utility 目录下的 china\_magic\_formula\_results.csv。
+5. 在 python 命令行交互界面运行 `import eval_utility.china_magic_formula` 执行神奇公式选股。除了 matplotlib 散点图，该脚本还会将初选结果保存中 eval\_utility 目录下的 china\_magic\_formula\_results.csv。
 
    有关神奇公式的简单介绍，参阅：<https://github.com/prstcsnpr/qmagicformula>。注意该结果仅供参考，更多历史数据需要收集与参考。
