@@ -11,3 +11,5 @@ db.sqlite3
 /eval_utility/STHeiti_Medium_1.ttf
 
 *.DS_Store
+
+.idea/
