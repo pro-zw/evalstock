@@ -3,10 +3,11 @@
 from django.db import models
 from django.utils import timezone
 
+
 class Stock(models.Model):
     stock_code = models.CharField(max_length=128, unique=True)
     stock_name = models.CharField(max_length=256)
-    industry = models.CharField(max_length=128)
+    industry = models.CharField(max_length=128, default=None, blank=True, null=True)
 
     # 最新数据所依赖的财报与市场数据日期
     financial_report_date = models.DateField('financial report date', default=None, blank=True, null=True)
@@ -14,6 +15,7 @@ class Stock(models.Model):
 
     # 总市值
     market_value = models.FloatField('market value', default=None, blank=True, null=True)
+
 
 class ChinaBalanceSheet(models.Model):
     # 股票
@@ -54,17 +56,19 @@ class ChinaBalanceSheet(models.Model):
     # 递延所得税负债
     deferred_tax_liabilities = models.FloatField('deferred tax liabilities', default=0)
     # 归属于母公司所有者权益合计
-    equity_to_parent_company_shareholders = models.FloatField('total equity attributable to the shareholders of parent company')
+    equity_to_parent_company_shareholders = models.FloatField(
+        'total equity attributable to the shareholders of parent company')
     # 所有者权益合计
     total_shareholders_equity = models.FloatField('total shareholders equity')
-    
+
     class Meta:
-        unique_together= (('stock', 'report_date'),)
+        unique_together = (('stock', 'report_date'),)
+
 
 class ChinaIncomeStatement(models.Model):
     # 股票
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    
+
     # 报告日期
     report_date = models.DateField('report date')
     # 营业收入
@@ -78,17 +82,19 @@ class ChinaIncomeStatement(models.Model):
     # 销售费用
     selling_expenses = models.FloatField('selling and distribution expenses')
     # 归属于母公司所有者的净利润
-    net_profit_to_parent_company_shareholders = models.FloatField('net profit attributable to shareholders of parent company')
+    net_profit_to_parent_company_shareholders = models.FloatField(
+        'net profit attributable to shareholders of parent company')
     # 净利润
     net_profit = models.FloatField('net profit')
 
     class Meta:
-        unique_together= (('stock', 'report_date'),)
+        unique_together = (('stock', 'report_date'),)
+
 
 class ChinaCashFlowStatement(models.Model):
     # 股票
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    
+
     # 报告日期
     report_date = models.DateField('report date')
     # 经营活动产生的现金流量净额
@@ -99,4 +105,14 @@ class ChinaCashFlowStatement(models.Model):
     net_cash_flows_from_financing_activities = models.FloatField('net cash flows from financing activities')
 
     class Meta:
-        unique_together= (('stock', 'report_date'),)
+        unique_together = (('stock', 'report_date'),)
+
+
+class AustraliaIncomeStatement(models.Model):
+    # 股票
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+
+    # 报告日期
+    report_date = models.DateField('report date')
+    # 息税前利润（报表中可能被称为：profit from operations 或 profit before interest and income tax expense 等）
+    earnings_before_interest_and_tax = models.IntegerField('earnings before interest and taxes')

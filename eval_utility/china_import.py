@@ -131,7 +131,7 @@ def import_all_data():
                            - selling_expenses
                            + income_from_joint)
         # 资本回报率 = EBIT/(净流动资产 + 净固定资产)
-        roic = (ebit_without_joint
+        roce = (ebit_without_joint
                 / (current_assets
                    - current_liabilities
                    - excess_cash
@@ -176,7 +176,7 @@ def import_all_data():
             defaults={
                 'ebit_without_joint': ebit_without_joint,
                 'ebit_with_joint': ebit_with_joint,
-                'roic': roic,
+                'roce': roce,
                 'earnings_yield': earnings_yield,
                 'net_profit_reality': net_cash_flows_from_operating_activities / net_profit
             })
@@ -188,7 +188,7 @@ def import_all_data():
             defaults={
                 'ebit_without_joint': ebit_without_joint,
                 'ebit_with_joint': ebit_with_joint,
-                'roic': roic
+                'roce': roce
             })
         historical_kpi.save()
 
