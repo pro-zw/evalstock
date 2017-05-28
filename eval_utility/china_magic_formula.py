@@ -19,7 +19,7 @@ def export_results():
     stock_quote_df = pd.read_csv('./eval_utility/china_stock_overview.csv',
                                  index_col=['股票名称'], parse_dates=True)
 
-    eligible_stocks = magic_formula_models.Stock.objects.filter(
+    eligible_stocks = magic_formula_models.LatestIndex.objects.filter(
         stock__market_value__gte=5e9,
         roce__lte=0.5,  # 太大的值不可信
         ebit_without_joint__gt=0.0,

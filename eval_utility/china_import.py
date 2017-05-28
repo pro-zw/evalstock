@@ -171,7 +171,7 @@ def import_all_data():
             })
         stock.save()
 
-        magic_formula_stock, created = magic_formula_models.Stock.objects.update_or_create(
+        magic_formula_index, created = magic_formula_models.LatestIndex.objects.update_or_create(
             stock=stock,
             defaults={
                 'ebit_without_joint': ebit_without_joint,
@@ -180,7 +180,7 @@ def import_all_data():
                 'earnings_yield': earnings_yield,
                 'net_profit_reality': net_cash_flows_from_operating_activities / net_profit
             })
-        magic_formula_stock.save()
+        magic_formula_index.save()
 
         # 公司关键业绩指标历史记录表
         historical_kpi, created = magic_formula_models.HistoricalKpi.objects.update_or_create(
