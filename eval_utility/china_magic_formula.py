@@ -7,25 +7,26 @@ import matplotlib.pyplot as plt
 
 import magic_formula.models as magic_formula_models
 
+# 设置图形输出默认参数
+font_name = './eval_utility/STHeiti_Medium_1.ttf'
+font_prop = font_manager.FontProperties(fname=font_name)
+mpl.rcParams['font.family'] = font_prop.get_name()
+mpl.rcParams['axes.unicode_minus'] = False
+
 
 def export_results():
-    # 设置图形输出默认参数
-    font_name = './eval_utility/STHeiti_Medium_1.ttf'
-    font_prop = font_manager.FontProperties(fname=font_name)
-    mpl.rcParams['font.family'] = font_prop.get_name()
-    mpl.rcParams['axes.unicode_minus'] = False
 
     # 读取股票最新市场数据
     stock_quote_df = pd.read_csv('./eval_utility/china_stock_overview.csv',
                                  index_col=['股票名称'], parse_dates=True)
 
     eligible_stocks = magic_formula_models.LatestIndex.objects.filter(
-        stock__market_value__gte=5e9,
-        roce__lte=0.5,  # 太大的值不可信
-        ebit_without_joint__gt=0.0,
-        ebit_with_joint__gt=0.0,
-        net_profit_reality__gt=0.6,
-        net_profit_reality__lt=2
+        stock__market_value__gte=2e10,
+        roce_ttm__lte=2.0,  # 太大的值不可信
+        ebit_without_joint_ttm__gt=0.0,
+        ebit_with_joint_ttm__gt=0.0,
+        # net_profit_reality__gt=0.6,
+        # net_profit_reality__lt=2
     ).prefetch_related('stock')
 
     eligible_stock_df = (pd.DataFrame(list(eligible_stocks.values(
@@ -39,6 +40,7 @@ def export_results():
 
     eligible_stock_df['市盈率TTM'] = stock_quote_df['市盈率TTM']
     eligible_stock_df = eligible_stock_df[eligible_stock_df['市盈率TTM'] <= 20]
+    eligible_stock_df = eligible_stock_df[eligible_stock_df['市盈率TTM'] >= 5]
 
     # 排序资本回报率
     eligible_stock_df.sort_values(by=['roce'], axis=0, ascending=False, inplace=True)
@@ -58,8 +60,23 @@ def export_results():
     f, ax = plt.subplots()
     ax.scatter(eligible_stock_df['roce'], eligible_stock_df['earnings_yield'])
     ax.set_title('神奇公式分布图')
-    ax.set_xlabel('资本回报率')
+    ax.set_xlabel('投入资本回报率')
     ax.set_ylabel('收益率')
     for i, stock_name in enumerate(eligible_stock_df['stock__stock_name']):
         ax.annotate(stock_name, (eligible_stock_df['roce'].iloc[i], eligible_stock_df['earnings_yield'].iloc[i]))
     plt.show()
+
+
+def plot_roce_ttm(stock_code: str):
+    from magic_formula.models import HistoricalKpi
+
+    historical_kpi = HistoricalKpi.objects.filter(stock__stock_code=stock_code)
+    roce_ttm_df = (pd.DataFrame(list(historical_kpi.values(
+        'stock__stock_name', 'report_date', 'roce_ttm')))
+        .set_index('report_date'))
+
+    plt.figure()
+    roce_ttm_df['roce_ttm'].plot(label=roce_ttm_df['stock__stock_name'][-1])
+    plt.legend()
+    plt.show()
+

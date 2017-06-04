@@ -42,6 +42,9 @@ class Stock(models.Model):
             return country_suffix + code_components[0]
         raise Exception('Unsupported country of stocks')
 
+    def __str__(self):
+        return '%s %s' % (self.stock_code, self.stock_name)
+
 
 class ChinaBalanceSheet(models.Model):
     # 股票
@@ -144,14 +147,69 @@ class ChinaCashFlowStatement(models.Model):
         unique_together = (('stock', 'report_date'),)
 
 
+class AustraliaBalanceSheet(models.Model):
+    # 股票
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+
+    # 报告日期
+    report_date = models.DateField('report date')
+    # 流动资产
+    current_assets = models.FloatField('current assets')
+    # 货币资金
+    cash = models.FloatField('Cash and cash equivalents')
+    # 流动负债
+    current_liabilities = models.FloatField('current liabilities')
+    # 非流动负债
+    non_current_liabilities = models.FloatField('non-current liabilities')
+    # 净资产
+    net_assets = models.FloatField('net assets')
+    # 总资产
+    total_assets = models.FloatField('total assets')
+    # 无形资产
+    intangible_assets = models.FloatField('intangible assets')
+    # 固定资产净值
+    fixed_assets_net_value = models.FloatField('fixed assets-net value')
+    # 短期各项应付款与借款
+    short_term_payables_and_borrowings = models.FloatField('short term payables and borrowings')
+    # 长期各项应付款与借款
+    long_term_payables_and_borrowings = models.FloatField('long term payables and borrowings')
+    # 递延所得税负债
+    deferred_tax_liabilities = models.FloatField('deferred tax liabilities')
+    # TODO: 投资性房地产与交易性金融资产
+
+    class Meta:
+        unique_together = (('stock', 'report_date'),)
+
+
 class AustraliaIncomeStatement(models.Model):
     # 股票
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
 
     # 报告日期
     report_date = models.DateField('report date')
-    # 息税前利润（报表中可能被称为：profit from operations 或 profit before interest and income tax expense 等）
-    earnings_before_interest_and_tax = models.IntegerField('earnings before interest and taxes')
+    # 营业收入
+    revenue = models.FloatField('revenue')
+    # 息税前利润（常规经营活动）
+    profit_before_interest_and_tax = models.FloatField('profit before interest and taxes from continuing operations')
+    # 净利润
+    total_comprehensive_income = models.FloatField('total comprehensive income')
+
+    class Meta:
+        unique_together = (('stock', 'report_date'),)
+
+
+class AustraliaCashFlowStatement(models.Model):
+    # 股票
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+
+    # 报告日期
+    report_date = models.DateField('report date')
+    # 经营活动产生的现金流量净额
+    net_cash_flows_from_operating_activities = models.FloatField('net cash flows from operating activities')
+    # 投资活动产生的现金流量净额
+    net_cash_flows_from_investing_activities = models.FloatField('net cash flows from investing activities')
+    # 筹资活动产生的现金流量净额
+    net_cash_flows_from_financing_activities = models.FloatField('net cash flows from financing activities')
 
     class Meta:
         unique_together = (('stock', 'report_date'),)

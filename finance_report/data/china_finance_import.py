@@ -42,7 +42,6 @@ def main(skip_existing_date: bool = False):
                                  .sort_values(by='报告类型'))
 
         # TODO: Maybe provide a function to skip existing date in the database
-        # TODO: Re-import the financial data for the additional columns
         stock.financial_report_date = stock_finance_data_df['报告类型'].iloc[-1]
         stock.save()
 
@@ -92,12 +91,12 @@ def main(skip_existing_date: bool = False):
                 })
             income_statement.save()
 
-        # 现金流量表
-        cash_flow_statement, created = ChinaCashFlowStatement.objects.update_or_create(
-            stock=stock, report_date=finance_data['报告类型'],
-            defaults={
-                'net_cash_flows_from_operating_activities': finance_data['经营活动产生的现金流量净额'],
-                'net_cash_flows_from_investing_activities': finance_data['投资活动产生的现金流量净额'],
-                'net_cash_flows_from_financing_activities': finance_data['筹资活动产生的现金流量净额']
-            })
-        cash_flow_statement.save()
+            # 现金流量表
+            cash_flow_statement, created = ChinaCashFlowStatement.objects.update_or_create(
+                stock=stock, report_date=finance_data['报告类型'],
+                defaults={
+                    'net_cash_flows_from_operating_activities': finance_data['经营活动产生的现金流量净额'],
+                    'net_cash_flows_from_investing_activities': finance_data['投资活动产生的现金流量净额'],
+                    'net_cash_flows_from_financing_activities': finance_data['筹资活动产生的现金流量净额']
+                })
+            cash_flow_statement.save()

@@ -2,7 +2,22 @@
 
 from django.contrib import admin
 
-from .models import Stock, ChinaBalanceSheet, ChinaIncomeStatement, ChinaCashFlowStatement
+from .models import (Stock,
+                     ChinaBalanceSheet, ChinaIncomeStatement, ChinaCashFlowStatement,
+                     AustraliaBalanceSheet, AustraliaIncomeStatement, AustraliaCashFlowStatement)
+
+
+class StockAdminMixin:
+    # TODO: We need to filter stocks list when adding a financial report (separate Australia and Chinese stocks)
+
+    def get_stock_code(self, obj):
+        return obj.stock.stock_code
+    get_stock_code.admin_order_field  = 'stock'
+    get_stock_code.short_description = 'Stock Code'
+
+    def get_stock_name(self, obj):
+        return obj.stock.stock_name
+    get_stock_name.short_description = 'Stock Name'
 
 
 class StockAdmin(admin.ModelAdmin):
@@ -13,7 +28,7 @@ class StockAdmin(admin.ModelAdmin):
     search_fields = ['stock_code', 'stock_name']
 
 
-class ChinaBalanceSheetAdmin(admin.ModelAdmin):
+class ChinaBalanceSheetAdmin(admin.ModelAdmin, StockAdminMixin):
     list_display = (
         'get_stock_code', 'get_stock_name', 'report_date', 
         'current_assets', 'cash', 'trading_financial_assets',
@@ -25,15 +40,6 @@ class ChinaBalanceSheetAdmin(admin.ModelAdmin):
         'total_assets')
     list_per_page = 30
     search_fields = ['stock__stock_code', 'stock__stock_name']
-
-    def get_stock_code(self, obj):
-        return obj.stock.stock_code
-    get_stock_code.admin_order_field  = 'stock'
-    get_stock_code.short_description = 'Stock Code'
-
-    def get_stock_name(self, obj):
-        return obj.stock.stock_name
-    get_stock_name.short_description = 'Stock Name'
 
     fieldsets = [
         (None,                   {'fields': ['stock', 'report_date']}),
@@ -53,7 +59,7 @@ class ChinaBalanceSheetAdmin(admin.ModelAdmin):
     ]
 
 
-class ChinaIncomeStatementAdmin(admin.ModelAdmin):
+class ChinaIncomeStatementAdmin(admin.ModelAdmin, StockAdminMixin):
     list_display = (
         'get_stock_code', 'get_stock_name', 'report_date', 
         'operations_income', 'operations_costs', 'taxes_and_surcharges',
@@ -62,17 +68,8 @@ class ChinaIncomeStatementAdmin(admin.ModelAdmin):
     list_per_page = 30
     search_fields = ['stock__stock_code', 'stock__stock_name']
 
-    def get_stock_code(self, obj):
-        return obj.stock.stock_code
-    get_stock_code.admin_order_field  = 'stock'
-    get_stock_code.short_description = 'Stock Code'
 
-    def get_stock_name(self, obj):
-        return obj.stock.stock_name
-    get_stock_name.short_description = 'Stock Name'
-
-
-class ChinaCashFlowStatementAdmin(admin.ModelAdmin):
+class ChinaCashFlowStatementAdmin(admin.ModelAdmin, StockAdminMixin):
     list_display = (
         'get_stock_code', 'get_stock_name', 'report_date', 
         'net_cash_flows_from_operating_activities', 
@@ -81,16 +78,54 @@ class ChinaCashFlowStatementAdmin(admin.ModelAdmin):
     list_per_page = 30
     search_fields = ['stock__stock_code', 'stock__stock_name']
 
-    def get_stock_code(self, obj):
-        return obj.stock.stock_code
-    get_stock_code.admin_order_field  = 'stock'
-    get_stock_code.short_description = 'Stock Code'
 
-    def get_stock_name(self, obj):
-        return obj.stock.stock_name
-    get_stock_name.short_description = 'Stock Name'
+class AustraliaBalanceSheetAdmin(admin.ModelAdmin, StockAdminMixin):
+    list_display = (
+        'get_stock_code', 'get_stock_name', 'report_date',
+        'current_assets', 'cash',
+        'fixed_assets_net_value', 'intangible_assets',
+        'current_liabilities', 'short_term_payables_and_borrowings',
+        'net_assets',
+        'total_assets')
+
+    list_per_page = 30
+    search_fields = ['stock__stock_code', 'stock__stock_name']
+
+    fieldsets = [
+        (None,                   {'fields': ['stock', 'report_date']}),
+        ('Current assets',       {'fields': ['cash', 'current_assets']}),
+        ('Non-current assets',   {'fields': ['fixed_assets_net_value', 'intangible_assets']}),
+        ('Total assets', {'fields': ['total_assets']}),
+        ('Current liabilities',  {'fields': ['short_term_payables_and_borrowings', 'current_liabilities']}),
+        ('Non-current liabilities', {'fields': ['long_term_payables_and_borrowings', 'deferred_tax_liabilities',
+                                                'non_current_liabilities']}),
+        ('Net assets', {'fields': ['net_assets']}),
+    ]
+
+
+class AustraliaIncomeStatementAdmin(admin.ModelAdmin, StockAdminMixin):
+    list_display = (
+        'get_stock_code', 'get_stock_name', 'report_date',
+        'revenue', 'profit_before_interest_and_tax', 'total_comprehensive_income')
+    list_per_page = 30
+    search_fields = ['stock__stock_code', 'stock__stock_name']
+
+
+class AustraliaCashFlowStatementAdmin(admin.ModelAdmin, StockAdminMixin):
+    list_display = (
+        'get_stock_code', 'get_stock_name', 'report_date',
+        'net_cash_flows_from_operating_activities',
+        'net_cash_flows_from_investing_activities',
+        'net_cash_flows_from_financing_activities')
+    list_per_page = 30
+    search_fields = ['stock__stock_code', 'stock__stock_name']
+
 
 admin.site.register(Stock, StockAdmin)
 admin.site.register(ChinaBalanceSheet, ChinaBalanceSheetAdmin)
 admin.site.register(ChinaIncomeStatement, ChinaIncomeStatementAdmin)
 admin.site.register(ChinaCashFlowStatement, ChinaCashFlowStatementAdmin)
+
+admin.site.register(AustraliaBalanceSheet, AustraliaBalanceSheetAdmin)
+admin.site.register(AustraliaIncomeStatement, AustraliaIncomeStatementAdmin)
+admin.site.register(AustraliaCashFlowStatement, AustraliaCashFlowStatementAdmin)
