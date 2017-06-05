@@ -12,6 +12,7 @@ eval_utility/STHeiti_Medium_1.ttf
 
 finance_report/data/china_all_financial_data.csv
 finance_report/data/china_stock_overview.csv
+finance_report/data/australia_stock_overview.csv
 
 *.DS_Store
 

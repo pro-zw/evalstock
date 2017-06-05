@@ -16,7 +16,7 @@ class Stock(models.Model):
     market_value = models.FloatField('market value', default=None, blank=True, null=True)
 
     @classmethod
-    def internal_code(cls, external_code: str, country: str = 'China') -> str:
+    def internal_code(cls, external_code: str, country: str) -> str:
         """Convert the stock code from external presentation to
         the internal presentation
         
@@ -27,6 +27,9 @@ class Stock(models.Model):
 
         if country == 'China':
             return external_code[2:] + '.' + external_code[0:2]
+        elif country == 'Australia':
+            return external_code + '.asx'
+
         raise Exception('Unsupported country of stocks')
 
     def external_code(self) -> str:
@@ -40,10 +43,13 @@ class Stock(models.Model):
         country_suffix = code_components[1]
         if country_suffix == 'sh' or country_suffix == 'sz':
             return country_suffix + code_components[0]
+        elif country_suffix == 'asx':
+            return code_components[0]
+
         raise Exception('Unsupported country of stocks')
 
     def __str__(self):
-        return '%s %s' % (self.stock_code, self.stock_name)
+        return '%s (%s)' % (self.stock_code, self.stock_name)
 
 
 class ChinaBalanceSheet(models.Model):

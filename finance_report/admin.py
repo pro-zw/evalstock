@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
+from django.db.models import Q
 
 from .models import (Stock,
                      ChinaBalanceSheet, ChinaIncomeStatement, ChinaCashFlowStatement,
@@ -12,7 +13,7 @@ class StockAdminMixin:
 
     def get_stock_code(self, obj):
         return obj.stock.stock_code
-    get_stock_code.admin_order_field  = 'stock'
+    get_stock_code.admin_order_field = 'stock'
     get_stock_code.short_description = 'Stock Code'
 
     def get_stock_name(self, obj):
@@ -58,6 +59,12 @@ class ChinaBalanceSheetAdmin(admin.ModelAdmin, StockAdminMixin):
                                      'total_shareholders_equity']}),
     ]
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ChinaBalanceSheetAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['stock'].queryset = Stock.objects.filter(
+            Q(stock_code__endswith='.sh') | Q(stock_code__endswith='.sz')).order_by('stock_code')
+        return form
+
 
 class ChinaIncomeStatementAdmin(admin.ModelAdmin, StockAdminMixin):
     list_display = (
@@ -68,6 +75,12 @@ class ChinaIncomeStatementAdmin(admin.ModelAdmin, StockAdminMixin):
     list_per_page = 30
     search_fields = ['stock__stock_code', 'stock__stock_name']
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ChinaIncomeStatementAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['stock'].queryset = Stock.objects.filter(
+            Q(stock_code__endswith='.sh') | Q(stock_code__endswith='.sz')).order_by('stock_code')
+        return form
+
 
 class ChinaCashFlowStatementAdmin(admin.ModelAdmin, StockAdminMixin):
     list_display = (
@@ -77,6 +90,12 @@ class ChinaCashFlowStatementAdmin(admin.ModelAdmin, StockAdminMixin):
         'net_cash_flows_from_financing_activities')
     list_per_page = 30
     search_fields = ['stock__stock_code', 'stock__stock_name']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ChinaCashFlowStatementAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['stock'].queryset = Stock.objects.filter(
+            Q(stock_code__endswith='.sh') | Q(stock_code__endswith='.sz')).order_by('stock_code')
+        return form
 
 
 class AustraliaBalanceSheetAdmin(admin.ModelAdmin, StockAdminMixin):
@@ -102,6 +121,11 @@ class AustraliaBalanceSheetAdmin(admin.ModelAdmin, StockAdminMixin):
         ('Net assets', {'fields': ['net_assets']}),
     ]
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(AustraliaBalanceSheetAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['stock'].queryset = Stock.objects.filter(stock_code__endswith='.asx').order_by('stock_code')
+        return form
+
 
 class AustraliaIncomeStatementAdmin(admin.ModelAdmin, StockAdminMixin):
     list_display = (
@@ -109,6 +133,11 @@ class AustraliaIncomeStatementAdmin(admin.ModelAdmin, StockAdminMixin):
         'revenue', 'profit_before_interest_and_tax', 'total_comprehensive_income')
     list_per_page = 30
     search_fields = ['stock__stock_code', 'stock__stock_name']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(AustraliaIncomeStatementAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['stock'].queryset = Stock.objects.filter(stock_code__endswith='.asx').order_by('stock_code')
+        return form
 
 
 class AustraliaCashFlowStatementAdmin(admin.ModelAdmin, StockAdminMixin):
@@ -120,8 +149,13 @@ class AustraliaCashFlowStatementAdmin(admin.ModelAdmin, StockAdminMixin):
     list_per_page = 30
     search_fields = ['stock__stock_code', 'stock__stock_name']
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(AustraliaCashFlowStatementAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['stock'].queryset = Stock.objects.filter(stock_code__endswith='.asx').order_by('stock_code')
+        return form
 
 admin.site.register(Stock, StockAdmin)
+
 admin.site.register(ChinaBalanceSheet, ChinaBalanceSheetAdmin)
 admin.site.register(ChinaIncomeStatement, ChinaIncomeStatementAdmin)
 admin.site.register(ChinaCashFlowStatement, ChinaCashFlowStatementAdmin)

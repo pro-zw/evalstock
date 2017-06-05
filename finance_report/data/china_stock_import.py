@@ -35,7 +35,7 @@ def main():
          market_data_date,
          market_value, industry) in stock_df.itertuples():
 
-        code = Stock.internal_code(code)
+        code = Stock.internal_code(code, 'China')
 
         stock, created = Stock.objects.update_or_create(
             stock_code=code,
