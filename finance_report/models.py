@@ -165,8 +165,12 @@ class AustraliaBalanceSheet(models.Model):
     cash = models.FloatField('Cash and cash equivalents')
     # 流动负债
     current_liabilities = models.FloatField('current liabilities')
+    # 流动或有负债
+    current_provisions = models.FloatField('current provisions')
     # 非流动负债
     non_current_liabilities = models.FloatField('non-current liabilities')
+    # 非流动或有负债
+    non_current_provisions = models.FloatField('non-current provisions')
     # 净资产
     net_assets = models.FloatField('net assets')
     # 总资产

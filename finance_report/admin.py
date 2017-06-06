@@ -103,7 +103,8 @@ class AustraliaBalanceSheetAdmin(admin.ModelAdmin, StockAdminMixin):
         'get_stock_code', 'get_stock_name', 'report_date',
         'current_assets', 'cash',
         'fixed_assets_net_value', 'intangible_assets',
-        'current_liabilities', 'short_term_payables_and_borrowings',
+        'current_liabilities', 'short_term_payables_and_borrowings', 'current_provisions',
+        'non_current_liabilities', 'non_current_provisions',
         'net_assets',
         'total_assets')
 
@@ -115,8 +116,12 @@ class AustraliaBalanceSheetAdmin(admin.ModelAdmin, StockAdminMixin):
         ('Current assets',       {'fields': ['cash', 'current_assets']}),
         ('Non-current assets',   {'fields': ['fixed_assets_net_value', 'intangible_assets']}),
         ('Total assets', {'fields': ['total_assets']}),
-        ('Current liabilities',  {'fields': ['short_term_payables_and_borrowings', 'current_liabilities']}),
-        ('Non-current liabilities', {'fields': ['long_term_payables_and_borrowings', 'deferred_tax_liabilities',
+        ('Current liabilities',  {'fields': ['short_term_payables_and_borrowings',
+                                             'current_provisions',
+                                             'current_liabilities']}),
+        ('Non-current liabilities', {'fields': ['long_term_payables_and_borrowings',
+                                                'non_current_provisions',
+                                                'deferred_tax_liabilities',
                                                 'non_current_liabilities']}),
         ('Net assets', {'fields': ['net_assets']}),
     ]
