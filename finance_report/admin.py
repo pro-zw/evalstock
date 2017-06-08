@@ -9,8 +9,6 @@ from .models import (Stock,
 
 
 class StockAdminMixin:
-    # TODO: We need to filter stocks list when adding a financial report (separate Australia and Chinese stocks)
-
     def get_stock_code(self, obj):
         return obj.stock.stock_code
     get_stock_code.admin_order_field = 'stock'

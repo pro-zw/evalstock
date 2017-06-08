@@ -70,13 +70,16 @@ def cal_china_data():
 
     # Load stock information from the database
     # Magic formula does not handle the following industries
-    for stock in Stock.objects.exclude(
-            Q(industry__exact='电力行业') |
-            Q(industry__exact='公路桥梁') |
-            Q(industry__exact='交通运输') |
-            Q(industry__exact='金融行业') |
-            Q(industry__exact='供水供气') |
-            Q(industry__isnull=True)):
+    for stock in Stock.objects\
+            .exclude(
+                Q(industry__exact='电力行业')
+                | Q(industry__exact='公路桥梁')
+                | Q(industry__exact='交通运输')
+                | Q(industry__exact='金融行业')
+                | Q(industry__exact='供水供气')
+                | Q(industry__isnull=True)
+            ).filter(Q(stock_code__endswith='.sh')
+                     | Q(stock_code__endswith='.sz')):
 
         balance_sheets = ChinaBalanceSheet.objects.filter(
             stock=stock,
