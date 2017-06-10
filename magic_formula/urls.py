@@ -4,5 +4,5 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^resourceful/china-stocks/([0-9]{6}\.(?:(?:sh)|(?:sz)))/$', views.china_stock),
+    url(r'^resourceful/stock/([0-9]{6}\.[a-z]+)/historical_kpi$', views.historical_kpi),
 ]

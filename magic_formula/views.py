@@ -1,13 +1,26 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render
 
 from django.http import HttpResponse
-import datetime
+from django.views.decorators.http import require_http_methods
+import json
+
+from .models import HistoricalKpi
+from eval_utility.json import date_serializer
 
 
-# TODO: Complete the API to return magic-formula kpi
-def china_stock(request, stock_code: str):
-    now = datetime.datetime.now()
-    html = "<html><body>It is now %s. The stock code is %s.</body></html>" % (now, stock_code)
-    return HttpResponse(html)
+@require_http_methods('GET')
+def historical_kpi(request, stock_code: str):
+    kpi_queryset = (HistoricalKpi.objects
+                                 .filter(stock__stock_code=stock_code)
+                                 .values('stock__stock_name',
+                                         'report_date',
+                                         'ebit_with_joint_ttm',
+                                         'ebit_without_joint',
+                                         'ebit_without_joint_ttm',
+                                         'roce',
+                                         'roce_ttm',
+                                         'net_profit_reality')
+                    )
+    return HttpResponse(json.dumps(list(kpi_queryset),
+                                   default=date_serializer), 'application/json')
