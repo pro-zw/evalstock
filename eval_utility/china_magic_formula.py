@@ -22,6 +22,7 @@ def export_results():
 
     eligible_stocks = magic_formula_models.LatestIndex.objects.filter(
         stock__market_value__gte=2e10,
+        stock__financial_report_date='2017-03-31',
         roce_ttm__lte=2.0,  # 太大的值不可信
         ebit_without_joint_ttm__gt=0.0,
         ebit_with_joint_ttm__gt=0.0,
@@ -79,4 +80,3 @@ def plot_roce_ttm(stock_code: str):
     roce_ttm_df['roce_ttm'].plot(label=roce_ttm_df['stock__stock_name'][-1])
     plt.legend()
     plt.show()
-

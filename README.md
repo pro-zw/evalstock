@@ -1,8 +1,10 @@
-## 项目架构
+## Architecture
 
-目前架构包含三个主要应用集合：
+Note: This following contents are out of date, and will be updated in the future. 
 
-1. 第一个应用集合是原始数据层，该集合中的应用主要负责**原始**数据的输入、存储与显示。目前仅包含 finance_report 应用，用于历史原始财务数据，和最基本的股票数据（仅包含股票编码、股票名称和市值等）。未来可添加更多原始数据，例如股票历史价格数据等。
+Currently there are three major apps:
+
+1. The first one is finance_report app, which is responsible for handling raw stocks overview and financial report data. More raw basic data may be added here in the future, for example, the historical stock prices.
 
 2. 第二个应用集合是选股模型数据层，该层应用依赖于原始数据层。该集合中的应用主要负责各选股模型所需的关键数据的计算、存储与显示。目前仅包含 magic_formula 应用，用于神奇公式关键数据。注意该层不仅计算与存储历史关键数据，还会存储与显示最新关键数据快照。未来可添加多种选股模型与数据。
 
@@ -37,3 +39,5 @@
 5. 在 python 命令行交互界面运行 `import eval_utility.china_magic_formula` 执行神奇公式选股。除了 matplotlib 散点图，该脚本还会将初选结果保存中 eval\_utility 目录下的 china\_magic\_formula\_results.csv。
 
    有关神奇公式的简单介绍，参阅：<https://github.com/prstcsnpr/qmagicformula>。注意该结果仅供参考，更多历史数据需要收集与参考。
+
+TODO: Remember to install django-cors-headers (`pip install django-cors-headers`) for enabling Cross-origin resource sharing. See <https://github.com/ottoyiu/django-cors-headers>.

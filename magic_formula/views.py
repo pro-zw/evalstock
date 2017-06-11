@@ -6,7 +6,7 @@ from django.views.decorators.http import require_http_methods
 import json
 
 from .models import HistoricalKpi
-from eval_utility.json import date_serializer
+from misc_helper.json import date_serializer
 
 
 @require_http_methods('GET')
