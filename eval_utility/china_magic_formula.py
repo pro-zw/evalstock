@@ -5,6 +5,8 @@ import matplotlib as mpl
 import matplotlib.font_manager as font_manager
 import matplotlib.pyplot as plt
 
+from django.db.models import Q
+
 import magic_formula.models as magic_formula_models
 
 # 设置图形输出默认参数
@@ -20,15 +22,20 @@ def export_results():
     stock_quote_df = pd.read_csv('./eval_utility/china_stock_overview.csv',
                                  index_col=['股票名称'], parse_dates=True)
 
-    eligible_stocks = magic_formula_models.LatestIndex.objects.filter(
-        stock__market_value__gte=2e10,
-        stock__financial_report_date='2017-03-31',
-        roce_ttm__lte=2.0,  # 太大的值不可信
-        ebit_without_joint_ttm__gt=0.0,
-        ebit_with_joint_ttm__gt=0.0,
-        # net_profit_reality__gt=0.6,
-        # net_profit_reality__lt=2
-    ).prefetch_related('stock')
+    eligible_stocks = (
+        magic_formula_models.LatestIndex.objects
+                            .filter(
+                                stock__market_value__gte=2e10,
+                                stock__financial_report_date='2017-03-31',
+                                roce_ttm__lte=2.0,  # 太大的值不可信
+                                ebit_without_joint_ttm__gt=0.0,
+                                ebit_with_joint_ttm__gt=0.0,
+                                # net_profit_reality__gt=0.6,
+                                # net_profit_reality__lt=2
+                                )
+                            .filter(Q(stock_code__endswith='.sh')
+                                    | Q(stock_code__endswith='.sz'))
+                            .prefetch_related('stock'))
 
     eligible_stock_df = (pd.DataFrame(list(eligible_stocks.values(
         'stock__stock_code', 'stock__stock_name', 'stock__market_value',
