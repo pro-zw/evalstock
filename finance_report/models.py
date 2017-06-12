@@ -65,7 +65,7 @@ class ChinaBalanceSheet(models.Model):
     # 交易性金融资产
     trading_financial_assets = models.FloatField('Financial assets held for trading')
     # 固定资产净值
-    fixed_assets_net_value = models.FloatField('fixed assets-net value')
+    fixed_assets_net_value = models.FloatField('fixed assets net value')
     # 投资性房地产
     investment_real_estates = models.FloatField('investment real estates')
     # 流动负债
@@ -178,7 +178,7 @@ class AustraliaBalanceSheet(models.Model):
     # 无形资产
     intangible_assets = models.FloatField('intangible assets')
     # 固定资产净值
-    fixed_assets_net_value = models.FloatField('fixed assets-net value')
+    fixed_assets_net_value = models.FloatField('fixed assets net value')
     # 短期各项应付款与借款
     short_term_payables_and_borrowings = models.FloatField('short term payables and borrowings')
     # 长期各项应付款与借款
@@ -200,8 +200,10 @@ class AustraliaIncomeStatement(models.Model):
     # 营业收入
     revenue = models.FloatField('revenue')
     # 息税前利润（常规经营活动）
-    profit_before_interest_and_tax = models.FloatField('profit before interest and taxes from continuing operations')
+    profit_before_interest_and_tax = models.FloatField('profit before interest and taxes')
     # 净利润
+    profit = models.FloatField('profit for the period')
+    # 综合收益
     total_comprehensive_income = models.FloatField('total comprehensive income')
 
     class Meta:
