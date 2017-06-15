@@ -100,7 +100,7 @@ class AustraliaBalanceSheetAdmin(admin.ModelAdmin, StockAdminMixin):
     list_display = (
         'get_stock_code', 'get_stock_name', 'report_date',
         'current_assets', 'cash',
-        'fixed_assets_net_value', 'intangible_assets',
+        'property_plant_and_equipment', 'intangible_assets',
         'current_liabilities', 'short_term_payables_and_borrowings', 'current_provisions',
         'non_current_liabilities', 'non_current_provisions',
         'net_assets',
@@ -112,7 +112,7 @@ class AustraliaBalanceSheetAdmin(admin.ModelAdmin, StockAdminMixin):
     fieldsets = [
         (None,                   {'fields': ['stock', 'report_date']}),
         ('Current assets',       {'fields': ['cash', 'current_assets']}),
-        ('Non-current assets',   {'fields': ['fixed_assets_net_value', 'intangible_assets']}),
+        ('Non-current assets',   {'fields': ['property_plant_and_equipment', 'intangible_assets']}),
         ('Total assets', {'fields': ['total_assets']}),
         ('Current liabilities',  {'fields': ['short_term_payables_and_borrowings',
                                              'current_provisions',

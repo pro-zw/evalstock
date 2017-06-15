@@ -178,7 +178,7 @@ class AustraliaBalanceSheet(models.Model):
     # 无形资产
     intangible_assets = models.FloatField('intangible assets')
     # 固定资产净值
-    fixed_assets_net_value = models.FloatField('fixed assets net value')
+    property_plant_and_equipment = models.FloatField('property, plant and equipment')
     # 短期各项应付款与借款
     short_term_payables_and_borrowings = models.FloatField('short term payables and borrowings')
     # 长期各项应付款与借款
