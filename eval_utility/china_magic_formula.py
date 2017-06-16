@@ -33,14 +33,15 @@ def export_results():
                                 # net_profit_reality__gt=0.6,
                                 # net_profit_reality__lt=2
                                 )
-                            .filter(Q(stock_code__endswith='.sh')
-                                    | Q(stock_code__endswith='.sz'))
+                            .filter(Q(stock__stock_code__endswith='.sh')
+                                    | Q(stock__stock_code__endswith='.sz'))
                             .prefetch_related('stock'))
 
     eligible_stock_df = (pd.DataFrame(list(eligible_stocks.values(
-        'stock__stock_code', 'stock__stock_name', 'stock__market_value',
-        'roce', 'earnings_yield', 'net_profit_reality')))
-                         .set_index('stock__stock_name'))
+        'stock__stock_code', 'stock__stock_name',
+        'stock__market_value', 'stock__industry',
+        'roce', 'roce_ttm', 'earnings_yield', 'net_profit_reality')))
+        .set_index('stock__stock_name'))
 
     # 简单指标过滤
     eligible_stock_df['市净率'] = stock_quote_df['市净率']
@@ -51,7 +52,7 @@ def export_results():
     eligible_stock_df = eligible_stock_df[eligible_stock_df['市盈率TTM'] >= 5]
 
     # 排序资本回报率
-    eligible_stock_df.sort_values(by=['roce'], axis=0, ascending=False, inplace=True)
+    eligible_stock_df.sort_values(by=['roce_ttm'], axis=0, ascending=False, inplace=True)
     eligible_stock_df['roce_rate'] = range(1, len(eligible_stock_df) + 1)
 
     # 排序收益率

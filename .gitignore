@@ -14,6 +14,8 @@ finance_report/data/china_all_financial_data.csv
 finance_report/data/china_stock_overview.csv
 finance_report/data/australia_stock_overview.csv
 
+.ipynb_checkpoints
+
 *.DS_Store
 
 .idea/
