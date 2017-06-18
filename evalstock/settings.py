@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'dopont_analysis.apps.DopontAnalysisConfig',
     'finance_report.apps.FinanceReportConfig',
     'magic_formula.apps.MagicFormulaConfig',
     'django.contrib.admin',

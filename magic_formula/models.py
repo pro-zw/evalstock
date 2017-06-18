@@ -9,6 +9,7 @@ class LatestIndex(models.Model):
         finance_report_models.Stock,
         on_delete=models.CASCADE,
         primary_key=True,
+        related_name='magic_formula_latest_index'
     )
 
     # 息税前利润（不包含对联营企业和合营企业的投资收益）
@@ -31,7 +32,11 @@ class LatestIndex(models.Model):
 
 class HistoricalKpi(models.Model):
     # 股票
-    stock = models.ForeignKey(finance_report_models.Stock, on_delete=models.CASCADE)
+    stock = models.ForeignKey(
+        finance_report_models.Stock,
+        on_delete=models.CASCADE,
+        related_name='magic_formula_historical_kpi'
+    )
 
     # 报告日期
     report_date = models.DateField('report date')
