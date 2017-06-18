@@ -92,14 +92,14 @@ def cal_china_data():
             report_date__gt=datetime.date(2006, 1, 1))
 
         balance_sheets_df = (pd.DataFrame(list(balance_sheets.values()))
-                             .set_index('report_date')
-                             .sort_index())
+                               .set_index('report_date')
+                               .sort_index())
         income_statements_df = (pd.DataFrame(list(income_statements.values()))
-                                .set_index('report_date')
-                                .sort_index())
-        cashflow_statements_df = (pd.DataFrame(list(cashflow_statements.values()))
                                   .set_index('report_date')
                                   .sort_index())
+        cashflow_statements_df = (pd.DataFrame(list(cashflow_statements.values()))
+                                    .set_index('report_date')
+                                    .sort_index())
 
         # Calculate roce
         # For balance sheet related data, we need quarterly moving average
