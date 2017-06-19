@@ -16,10 +16,10 @@ class LatestIndex(models.Model):
     gross_margin = models.FloatField('gross margin')
     # 主营业务毛利率 TTM
     gross_margin_ttm = models.FloatField('gross margin ttm')
-    # 综合毛利率
-    consolidated_gross_margin = models.FloatField('consolidated gross margin')
-    # 综合毛利率 TTM
-    consolidated_gross_margin_ttm = models.FloatField('consolidated gross margin ttm')
+    # 销售毛利率
+    profit_margin = models.FloatField('profit margin')
+    # 销售毛利率 TTM
+    profit_margin_ttm = models.FloatField('profit margin ttm')
     # 资产周转率 TTM
     asset_turnover_ttm = models.FloatField('asset turnover ttm')
     # 权益乘数 TTM

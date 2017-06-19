@@ -73,7 +73,7 @@ def cal_china_data():
                                     + d['fixed_assets_net_value'] + d['investment_real_estates'])
                             )[['excess_cash', 'capital_employed']]
         magic_formula_df.loc[:, 'capital_employed_mean'] \
-            = magic_formula_df['capital_employed'].rolling(center=False, window=5).mean()
+            = magic_formula_df['capital_employed'].rolling(center=False, window=4).mean()
 
         # For income statement related data, we need difference of trailing twelve months
         magic_formula_df.loc[:, 'ebit_without_joint'] = (
