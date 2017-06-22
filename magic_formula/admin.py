@@ -2,18 +2,8 @@
 
 from django.contrib import admin
 
+from finance_report.admin import StockAdminMixin
 from .models import LatestIndex, HistoricalKpi
-
-
-class StockAdminMixin:
-    def get_stock_code(self, obj):
-        return obj.stock.stock_code
-    get_stock_code.admin_order_field = 'stock'
-    get_stock_code.short_description = 'Stock Code'
-
-    def get_stock_name(self, obj):
-        return obj.stock.stock_name
-    get_stock_name.short_description = 'Stock Name'
 
 
 class LatestIndexAdmin(admin.ModelAdmin, StockAdminMixin):

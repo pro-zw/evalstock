@@ -7,7 +7,7 @@ from django.db.models import Q
 from misc_helper.data import cal_trailing_year_series
 from finance_report.models import (
     Stock, ChinaBalanceSheet, ChinaIncomeStatement)
-from magic_formula.models import (LatestIndex, HistoricalKpi)
+from dopont_analysis.models import (LatestIndex, HistoricalKpi)
 
 
 def cal_china_data():
@@ -68,9 +68,31 @@ def cal_china_data():
         dopont_df.loc[:, 'equity_multiplier_ttm'] = \
             total_assets_mean / total_shareholders_equity_mean
 
-        dopont_df.dropna(inplace=True)
+        dopont_df = dopont_df.dropna().sort_index()
 
-        # TODO: Re-calculate the magic formula data
-        print(dopont_df)
+        # Save all results into the database
+        latest_dopont_index = dopont_df.tail(1)
+        latest_index, _ = LatestIndex.objects.update_or_create(
+            stock=stock,
+            defaults={
+                'gross_margin': latest_dopont_index['gross_margin'],
+                'gross_margin_ttm': latest_dopont_index['gross_margin_ttm'],
+                'profit_margin': latest_dopont_index['profit_margin'],
+                'profit_margin_ttm': latest_dopont_index['profit_margin_ttm'],
+                'asset_turnover_ttm': latest_dopont_index['asset_turnover_ttm'],
+                'equity_multiplier_ttm': latest_dopont_index['equity_multiplier_ttm']
+            })
+        latest_index.save()
 
-        break
+        for row in dopont_df.iterrows():
+            historical_kpi, _ = HistoricalKpi.objects.update_or_create(
+                stock=stock, report_date=row[0],
+                defaults={
+                    'gross_margin': row[1]['gross_margin'],
+                    'gross_margin_ttm': row[1]['gross_margin_ttm'],
+                    'profit_margin': row[1]['profit_margin'],
+                    'profit_margin_ttm': row[1]['profit_margin_ttm'],
+                    'asset_turnover_ttm': row[1]['asset_turnover_ttm'],
+                    'equity_multiplier_ttm': row[1]['equity_multiplier_ttm']
+                })
+            historical_kpi.save()
